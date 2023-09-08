@@ -204,10 +204,10 @@ function App() {
 
     <Flex className='container' justifyContent={"center"} flexDirection={"column"} alignItems={"center"} style={{
       backgroundImage: 'url("https://cdn.pixabay.com/photo/2018/05/17/23/59/clock-3410034_1280.jpg")',
-      backgroundSize: 'cover', // Adjust as needed
-      backgroundRepeat: 'no-repeat', // Adjust as needed
-      backgroundColor: 'rgba(255, 255, 255, 0.9)', // Adjust the alpha value (0.9) for transparency
-      padding: '20px', // Add padding to improve readability
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      padding: '20px',
     }}>
       <Container w={"60vw"} className='minicontainer' px={"10px"}>
         <Heading border={"1px solid grey"} textAlign={"center"} fontSize={"2rem"} py={"2rem"} letterSpacing={"0.2rem"}>Date Navigator</Heading>
