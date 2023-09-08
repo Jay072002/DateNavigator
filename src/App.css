@@ -2,10 +2,60 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.container {
+  background-color: rgba(255, 255, 255, 0.9); /* Adjust the alpha value (0.9) for transparency */
+  /* Add more background properties as needed */
+  color: white;
+  font-weight: bolder;
+  position: relative; /* Ensure relative positioning */
 }
+
+/* styles.css */
+.minicontainer {
+background: rgb(0,36,27);
+background: linear-gradient(90deg, rgba(0,36,27,1) 0%, rgba(194,109,53,0.3449754901960784) 56%, rgba(0,212,255,1) 100%);
+}
+
+
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.9); /* Adjust the alpha value (0.9) for transparency */
+  z-index: -1; /* Place the background behind other content */
+}
+
+.container-content {
+  color: white;
+  font-weight: bolder;
+  /* Add other content-related styles here */
+}
+
+/* styles.css */
+/* Define the scrollbar track */
+.result::-webkit-scrollbar {
+  width: 12px; /* Set the width of the scrollbar */
+}
+
+/* Define the scrollbar thumb */
+.result::-webkit-scrollbar-thumb {
+  background-color: #fff; /* Set the color of the scrollbar thumb */
+  border-radius: 6px; /* Round the corners of the thumb */
+}
+
+/* Define the scrollbar track on hover */
+.result::-webkit-scrollbar-track {
+  background-color: #814123; /* Set the color of the scrollbar track */
+}
+
+/* Define the scrollbar thumb on hover */
+.result::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Change the thumb color on hover */
+}
+
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

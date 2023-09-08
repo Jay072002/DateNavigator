@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { Button, Container, Flex, FormLabel, Heading, Input, Select } from '@chakra-ui/react'
-import { startOfMonth, addDays, format, getMonth, addMonths } from 'date-fns';
+import { addMonths } from 'date-fns';
+import DatePicker from 'react-date-picker';
+import 'react-date-picker/dist/DatePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import "./App.css"
+import toast from 'react-hot-toast';
 
 
 function App() {
@@ -14,8 +19,9 @@ function App() {
 
   // handle start date change 
   const handleStartDateChange = (date) => {
+
     const nextYear = date.getFullYear() + 1;
-    const nextYearDate = new Date(nextYear, date.getMonth(), date.getDate() + 1);
+    const nextYearDate = new Date(nextYear, date.getMonth(), date.getDate());
     setStartDate(date);
     setEndDate(nextYearDate);
   };
@@ -104,6 +110,7 @@ function App() {
       const day = currentDate.getDay(); // 0 (Sunday) to 6 (Saturday)
 
       if (day === weekdayNumber) {
+        console.log(new Date(currentDate), "afjkab");
         matchingDates.push(new Date(currentDate).toDateString());
       }
 
@@ -118,11 +125,23 @@ function App() {
   // handle the submit click
   const handleSubmit = () => {
 
+
+    if (startDate > endDate) {
+      return toast('Start date cannot be greater than end date!',
+        {
+          icon: '⚠️',
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            color: '#fff',
+          },
+        }
+      );
+    }
+
     let occurrence = dropdown1Value;
     let weekday = dropdown2Value;
     let specification = dropdown3Value;
-
-    let results = [];
 
     // occurance needed only if specifcation is month
     if (specification == "Month") {
@@ -131,6 +150,11 @@ function App() {
     } else {
       fetchAllDaysOfUserSpecification(startDate, endDate, weekday)
     }
+
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth'
+    });
 
   }
 
@@ -156,7 +180,7 @@ function App() {
         while (startDate < endDate) {
 
           const specificDate = getSpecificDay(startDate, weekday, occurance);
-          results.push(specificDate.toLocaleDateString());
+          results.push(specificDate.toDateString());
 
           // Increase the month by 1 and reset the day to the 1st
           startDate = addMonths(startDate, 1);
@@ -177,16 +201,25 @@ function App() {
   }
 
   return (
-    <Flex justifyContent={"center"} flexDirection={"column"} alignItems={"center"}>
-      <Container w={"60vw"}>
-        <Heading border={"1px solid grey"} textAlign={"center"} fontSize={"2rem"}>Task Form</Heading>
+
+    <Flex className='container' justifyContent={"center"} flexDirection={"column"} alignItems={"center"} style={{
+      backgroundImage: 'url("https://cdn.pixabay.com/photo/2018/05/17/23/59/clock-3410034_1280.jpg")',
+      backgroundSize: 'cover', // Adjust as needed
+      backgroundRepeat: 'no-repeat', // Adjust as needed
+      backgroundColor: 'rgba(255, 255, 255, 0.9)', // Adjust the alpha value (0.9) for transparency
+      padding: '20px', // Add padding to improve readability
+    }}>
+      <Container w={"60vw"} className='minicontainer' px={"10px"}>
+        <Heading border={"1px solid grey"} textAlign={"center"} fontSize={"2rem"} py={"2rem"} letterSpacing={"0.2rem"}>Date Navigator</Heading>
         <Flex padding={"1rem"} border={"1px solid grey"} m={7} textAlign={"center"} justifyContent={"start"} alignItems={"center"}>
           <FormLabel fontSize={"1.5rem"} display={"inline-block"} mx={"1rem"} >Start Date :</FormLabel>
-          <Input padding={"0.3rem"} value={startDate.toISOString().split('T')[0]} onBlur={(e) => e.preventDefault()} type="date" onChange={(e) => handleStartDateChange(new Date(e.target.value))} />
+          <DatePicker value={startDate}
+            closeCalendar={false}
+            padding={"0.3rem"} onChange={handleStartDateChange} />
         </Flex>
         <Flex padding={"1rem"} border={"1px solid grey"} m={7} textAlign={"center"} justifyContent={"start"} alignItems={"center"}>
           <FormLabel fontSize={"1.5rem"} display={"inline-block"} mx={"1rem"} >End Date :</FormLabel>
-          <Input padding={"0.3rem"} type="date" value={endDate.toISOString().split('T')[0]} onChange={(e) => handleEndDateChange(new Date(e.target.value))} />
+          <DatePicker value={endDate} closeCalendar={false} onChange={handleEndDateChange} />
         </Flex>
 
         {dropdown3Value == "Month" ? <Flex padding={"1rem"} border={"1px solid grey"} m={7} textAlign={"center"} justifyContent={"start"} alignItems={"center"}>
@@ -223,14 +256,14 @@ function App() {
           </Select>
         </Flex>
 
-        <Button colorScheme='blue' margin={7} fontSize={"1rem"} width={"100%"} padding={"0.8rem"} bg={"teal"} color={"white"} fontWeight={"bold"} letterSpacing={"0.2rem"} cursor={"pointer"} onClick={handleSubmit}>Submit</Button>
+        <Button colorScheme='blue' margin={7} fontSize={"1.2rem"} borderRadius={"20px"} width={"100%"} py={"1.2rem"} bg={"teal"} color={"white"} fontWeight={"bold"} letterSpacing={"0.2rem"} cursor={"pointer"} onClick={handleSubmit}>Get Result</Button>
 
 
         {/* Display results here */}
-        <Container border={"1px solid grey"} h={"600px"} overflowY={"scroll"}>
-          <Heading ml={"2rem"}>Results:</Heading>
+        <Container className='result' border={"1px solid grey"} h={"600px"} overflowY={"scroll"}>
+          <Heading ml={"2rem"} fontSize={"1.5rem"} textAlign={"center"} color={"black"} fontWeight={900} position={"sticky"} top={0}>Total Dates : {results.length}</Heading>
           {results.map((item, index) => (
-            <Container border={"1px solid grey"} borderLeft={"none"} p={"1.5rem"} key={index}>{item}</Container>
+            <Container letterSpacing={"0.2rem"} border={"1px solid grey"} borderLeft={"none"} p={"1.5rem"} key={index}>{item}</Container>
           ))}
         </Container>
       </Container>
